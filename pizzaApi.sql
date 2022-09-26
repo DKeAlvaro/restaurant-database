@@ -1,18 +1,21 @@
 CREATE DATABASE PizzaAPI;
 USE PizzaAPI;
 
-CREATE TABLE Customer(id double, name VARCHAR(30), phone INTEGER );
+CREATE TABLE Customer(id double, name VARCHAR(30), adress VARCHAR(45) , PRIMARY KEY (id));
+DROP TABLE Customer;
+
+
 CREATE TABLE Staff(deliverers INTEGER, waiters INTEGER );
 DROP TABLE Staff;
 
 CREATE TABLE Menu(id INTEGER, name VARCHAR(45),price DOUBLE, PRIMARY KEY (id));
 DROP TABLE Menu;
 
-CREATE TABLE Pizzas(id INTEGER, name VARCHAR(45), ingredients VARCHAR(45), price DOUBLE);
+CREATE TABLE Pizzas(id INTEGER, name VARCHAR(45), price DOUBLE, vegan BIT);
 DROP TABLE Pizzas;
 SELECT * FROM Pizzas;
 
-CREATE TABLE Ingredients(id INTEGER, name VARCHAR(45), price DOUBLE, PRIMARY KEY (id));
+CREATE TABLE Ingredients(id INTEGER, name VARCHAR(45), price DOUBLE, vegan BIT, PRIMARY KEY (id));
 DROP TABLE Ingredients;
 SELECT * FROM Ingredients;
 
@@ -24,37 +27,50 @@ CREATE TABLE Drinks(id INTEGER, name VARCHAR(45), price DOUBLE, PRIMARY KEY (id)
 DROP TABLE Drinks;
 SELECT * FROM Drinks; 
 
-CREATE TABLE Customers(id INTEGER, name VARCHAR(45), lastname VARCHAR(45), numberorder INTEGER);
+CREATE TABLE Customers(id INTEGER, name VARCHAR(45), lastname VARCHAR(45), numberorder INTEGER, adress VARCHAR(45), PRIMARY KEY(id));
 DROP TABLE Customers;
 SELECT * FROM Customers;
 
+
+
+CREATE TABLE MargaritaIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM MargaritaIngredients;
+
+CREATE TABLE BarbequeIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM BarbequeIngredients;
+
+CREATE TABLE ChickenIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM ChickenIngredients;
+
+CREATE TABLE DiavolaIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM DiavolaIngredients;
+
+CREATE TABLE FourCheeseIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM FourCheeseIngredients;
+
+CREATE TABLE FunghiIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM FunghiIngredients;
+
+CREATE TABLE HamIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM HamIngredients;
+
+CREATE TABLE HawaiIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM HawaiIngredients;
+
+CREATE TABLE PepperoniIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM Pepperon;
+
+CREATE TABLE ProsciutoIngredients(ID integer, name varchar(45), Price integer);
+SELECT * FROM Prosciutoingrdeints;
+
+CREATE TABLE PizzaIngredients(id INTEGER, pepperoni bit, ham bit, tomato bit, herbs bit, cheese bit, chicken bit, funghi bit, cheddar bit, gouda bit, bluecheese bit, dutchcheese bit, 
+salami bit, pienapple bit, olives bit,barbequesauce bit, price double);
+SELECT * FROM PizzaIngredients;
+
+
+
 SHOW FULL TABLES;
 
-INSERT INTO Customers(id, name, lastname, numberorder) VALUES(1, 'Juan', 'Escutia', 1);
-INSERT INTO Customers(id, name, lastname, numberorder) VALUES(2, 'Pablo', 'Barrera', 1);
-INSERT INTO Customers(id, name, lastname, numberorder) VALUES(3, 'Rimelque', 'Gomez', 1);
-
-INSERT INTO Ingredients(id, name, price) VALUES(0, 'Pepperoni', 4);
-INSERT INTO Ingredients(id, name, price) VALUES(1, 'Ham', 4);
-INSERT INTO Ingredients(id, name, price) VALUES(2, 'Tomato', 2);
-INSERT INTO Ingredients(id, name, price) VALUES(3, 'Herbs', 2);
-INSERT INTO Ingredients(id, name, price) VALUES(4, 'Cheese', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(5, 'Chicken', 4);
-INSERT INTO Ingredients(id, name, price) VALUES(6, 'Funghi', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(7, 'Cheddar', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(8, 'Gouda', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(9, 'Blue Cheese', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(10, 'Dutch Cheese', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(11, 'Salami', 4);
-INSERT INTO Ingredients(id, name, price) VALUES(12, 'Pineapple', 3);
-INSERT INTO Ingredients(id, name, price) VALUES(13, 'Olives', 2);
-INSERT INTO Ingredients(id, name, price) VALUES(14, 'Barbeque sauce', 2);
-
-INSERT INTO Desserts(id, name, price) VALUES(15, 'Brownie', 6);
-INSERT INTO Desserts(id, name, price) VALUES(16, 'Cheesecake', 6);
-
-INSERT INTO Drinks(id,name, price ) VALUES (17, 'Sprite', 3);
-INSERT INTO Drinks(id,name, price ) VALUES (18, 'Coke', 3);
 
 
 
