@@ -28,6 +28,15 @@ INSERT INTO Drinks(id,name, price ) VALUES (18, 'Coke', 3);
 INSERT INTO Drinks(id,name, price ) VALUES (19, 'Fanta', 3);
 INSERT INTO Drinks(id,name, price ) VALUES (20, 'Redbull', 3);
 
-INSERT INTO PizzaIngredients VALUES (0, );
+INSERT INTO PizzaIngredients VALUES (0, true,false,true,false,true,false,false, false,false,false,false,false,false,false,false,9);#pepperoni
+INSERT INTO PizzaIngredients VALUES (1, false,true,true,false,true,false,false, false,false,false,false,false,false,false,false,9);#ham
+INSERT INTO PizzaIngredients VALUES (2, false,false,true,true,true,false,false, false,false,false,false,false,false,false,false,7);#margarita
+INSERT INTO PizzaIngredients VALUES (3, false,false,true,false,true,true,false, false,false,false,false,false,false,false,false,9);#chicken
+INSERT INTO PizzaIngredients VALUES (4, false,false,true,false,true,false,true, false,false,false,false,false,false,false,false,8);#funghi
+INSERT INTO PizzaIngredients VALUES (5, false,false,true,false,false,false,false, true,true,true,false,false,false,false,false,12);#fourcheese
+INSERT INTO PizzaIngredients VALUES (6,true,false,true,false,true,false,true, false,false,false,false,true,false,false,false,13);#diavola
+INSERT INTO PizzaIngredients VALUES (7, false,true,true,false,true,false,false, false,false,false,false,false,false,false,false,12);#hawai
+INSERT INTO PizzaIngredients VALUES (8, false,false,true,false,true,false,false, false,false,false,false,false,true,true,true,10);#barbeque
+INSERT INTO PizzaIngredients VALUES (9, false,false,true,false,true,false,true, false,false,false,false,false,false,true,false,12);#profunghi
 
 
