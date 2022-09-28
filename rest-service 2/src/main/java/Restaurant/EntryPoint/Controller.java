@@ -1,13 +1,12 @@
-package com.example.restservice;
+package Restaurant.EntryPoint;
 
 import Restaurant.Menu;
-import Restaurant.Orders.CancelledOrder;
 import Restaurant.Orders.ListOfOrders;
 import Restaurant.Orders.Order;
 import Restaurant.Orders.OrderInfo;
+import Restaurant.Pizzas.JDBC;
 import Restaurant.Pizzas.Pizza;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -26,8 +26,9 @@ public class Controller {
         return "Welcome to our restaurant";
     }
     @RequestMapping("/pizza")
-    public List<Pizza> getPizzas(){
-        return Menu.getPizzas();
+    public List<Pizza> getPizzas() throws SQLException {
+
+        return JDBC.getPizzas();
     }
     @RequestMapping("/pizza/id")
     public Pizza getPizza(@RequestParam int ID){
@@ -45,9 +46,12 @@ public class Controller {
         return ListOfOrders.getOrder(ID);
     }
 
+    /*
     @PutMapping("/order/cancel")
     public CancelledOrder cancel(@RequestParam int ID){
         return new CancelledOrder(ListOfOrders.getOrder(ID));
     }
+
+     */
     
 }

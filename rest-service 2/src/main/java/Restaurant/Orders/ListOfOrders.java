@@ -6,7 +6,6 @@ import java.util.List;
 
 public class ListOfOrders {
     public static List<Order> orders;
-    public static List<CancelledOrder> cancelledOrders;
     public static HashMap<Integer, OrderInfo> ordersInfo = new HashMap<Integer, OrderInfo>();
     public static HashMap<Integer, Order> ordersMap = new HashMap<Integer, Order>();
 

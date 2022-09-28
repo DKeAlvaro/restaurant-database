@@ -1,8 +1,10 @@
 package Restaurant.Pizzas;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CreateDatabase{
+public class JDBC{
 
     static Connection con;
     static Statement statement;
@@ -17,18 +19,25 @@ public class CreateDatabase{
     }
 
     public static void main(String[] args) throws SQLException {
-        showTable("ingredients", "name");
-        addIngredient(2, "caca de pajaro", 4);
-        addIngredient(1, "comida para perros", 6);
-        addIngredient(4, "vomito de abuela", 9);
+        printField("pizzas", "name");
+        addIngredient(15, "", 10);
 
-        addPizza();
     }
     public static void addIngredient(int ID, String name, double price)throws SQLException{
         statement.execute("INSERT ingredients(id, name, price) values("+ID+", "+"'"+name+"'"+", "+price+")");
     }
 
-    public static void showTable(String name, String field) throws SQLException {
+    public static List<Pizza> getPizzas() throws SQLException {
+        List<Pizza> pizzas = new ArrayList<>();
+        ResultSet res = statement.executeQuery("SELECT *  FROM pizzas");
+        while (res.next()) {
+            pizzas.add(new Pizza(res.getInt("id"), res.getString("name"), res.getInt("price")));
+        }
+        return pizzas;
+
+    }
+
+    public static void printField(String name, String field) throws SQLException {
 
         ResultSet res = statement.executeQuery("SELECT *  FROM "+ name);
         while (res.next()) {
