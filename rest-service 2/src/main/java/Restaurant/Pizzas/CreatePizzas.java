@@ -103,10 +103,10 @@ public class CreatePizzas {
         System.out.println("Welcome to our Menu");
         System.out.println("Pizzas:");
             printPizzas();
-        System.out.println("\n");
+        System.out.println("");
         System.out.println("Desserts:");
         printDesserts();
-        System.out.println("\n");
+        System.out.println("");
         System.out.println("Drinks:");
         printDrinks();
         System.out.println("\n");
