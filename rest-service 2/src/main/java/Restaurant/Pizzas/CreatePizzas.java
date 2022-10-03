@@ -51,7 +51,7 @@ public class CreatePizzas {
         HashMap hm = new HashMap<>();
         List pizzas = new ArrayList<Pizzas>();
         while(res.next()){
-            pizzas.add(new Pizzas(res.getInt("id"),res.getString("name"),res.getDouble("price")));
+            pizzas.add(new Pizzas(res.getInt("id"),res.getString("name"),res.getDouble("price"), res.getBoolean("vegan")));
         }
         System.out.println(pizzas.toString());
 
@@ -60,7 +60,7 @@ public class CreatePizzas {
         ResultSet res = statement.executeQuery("select * from desserts");
         List desserts = new ArrayList<Desserts>();
         while(res.next()){
-            desserts.add(new Pizzas(res.getInt("id"),res.getString("name"),res.getDouble("price")));
+            desserts.add(new Desserts(res.getInt("id"),res.getString("name"),res.getDouble("price")));
         }
         System.out.println(desserts.toString());
 
@@ -69,7 +69,7 @@ public class CreatePizzas {
         ResultSet res = statement.executeQuery("select * from drinks");
         List drinks = new ArrayList<Drinks>();
         while(res.next()){
-            drinks.add(new Pizzas(res.getInt("id"),res.getString("name"),res.getDouble("price")));
+            drinks.add(new Drinks(res.getInt("id"),res.getString("name"),res.getDouble("price")));
         }
         System.out.println(drinks.toString());
 

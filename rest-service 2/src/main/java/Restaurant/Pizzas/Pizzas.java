@@ -8,10 +8,13 @@ public class Pizzas {
     private final int id;
     private final String name;
 
-    public Pizzas(int id, String name, double price) {
+    private boolean vegan;
+
+    public Pizzas(int id, String name, double price, boolean vegan) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.vegan = vegan;
     }
 
 
@@ -26,8 +29,11 @@ public class Pizzas {
     public String getName() {
         return name;
     }
+    public boolean getVegan(){
+        return vegan;
+    }
     @Override
     public String toString(){
-        return "id:"+ getId()  + " "+getName()+ " price:"+ getPrice();
+        return "id:"+ getId()  + " "+getName()+ " price:"+ getPrice() + " vegan:"+ getVegan() ;
     }
 }
