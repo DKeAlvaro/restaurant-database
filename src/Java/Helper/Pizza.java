@@ -1,8 +1,8 @@
-package Restaurant.Pizzas;
+package Java.Helper;
 
 import java.util.ArrayList;
 
-public class Pizzas {
+public class Pizza {
 
     private final double price;
     private final int id;
@@ -10,7 +10,7 @@ public class Pizzas {
 
     private boolean vegan;
 
-    public Pizzas(int id, String name, double price, boolean vegan) {
+    public Pizza(int id, String name, double price, boolean vegan) {
         this.id = id;
         this.name = name;
         this.price = price;

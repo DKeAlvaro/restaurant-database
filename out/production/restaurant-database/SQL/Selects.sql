@@ -1,0 +1,12 @@
+SELECT * FROM Pizzas;
+SELECT * FROM Ingredients;
+SELECT * FROM Desserts; 
+SELECT * FROM Drinks; 
+SELECT *FROM Menu;
+SELECT * FROM Staff;
+SELECT * FROM Customer;
+SELECT * FROM Customer WHERE  id = 2;
+SELECT * FROM PizzaIngredients;
+SELECT * FROM Orders;
+SELECT * FROM OrdersCust;
+DELETE FROM Orders;
