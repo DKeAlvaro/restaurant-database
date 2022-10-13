@@ -159,8 +159,11 @@ public class Controller {
                 prods = prod.nextInt();
                 if (prods >= 21 && prods <= 30) {
                     discount.add(prods);
+                }
+                if(14<prods && prods< 31){
                     productIDs.add(prods);
                     products.add(prods);
+
                 }
             } while (prods != 999);
             //order.insertOrders(getId(), products.size()-1);
