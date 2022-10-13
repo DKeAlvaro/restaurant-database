@@ -2,15 +2,17 @@ package Java;
 
 import Java.Helper.Print;
 
+import java.security.PublicKey;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class Controller {
     static int Id;
-    static Connection con;
+    public static Connection con;
     public static Statement statement;
     public static ArrayList<Integer> discount = new ArrayList<Integer>();
     static boolean test = false;
@@ -129,30 +131,37 @@ public class Controller {
         );
         System.out.println("If you want to exit type 'get me out'\n");
         System.out.println("if you want to cancel an order please type 'cancel'\n");
+        System.out.println("If you want to get the info of a pizza type 'info'\n");
+        System.out.println("If you want to see the status of your order type 'status'\n");
+
         String name;
 
         do {
             Scanner scanner = new Scanner(System.in);
             name = scanner.nextLine();
-            if(!(name.equals("order")  || name.equals("get me out") ||  name.equals("cancel") || name.equals("status")))
+            if(!(name.equals("order")  || name.equals("get me out") ||  name.equals("cancel") || name.equals("status") || name.equals("info")))
                 System.out.println("enter a valid command");
-        } while (!(name.equals("order")  || name.equals("get me out") ||  name.equals("cancel") || name.equals("status")));
+        } while (!(name.equals("order")  || name.equals("get me out") ||  name.equals("cancel") || name.equals("status") || name.equals("info")));
 
         if (name.equals("get me out")) {
             System.out.println("Thanks for visiting ");
             return;
         } else if (name.equals("order")) {
             int prods;
+            List<Integer> productIDs = new ArrayList<>();
             do {
 
                 System.out.println("Enter the id's of the products you desire"
                         + "\n" +
                         "type '999' whenever you are done with your order");
+
                 Scanner prod = new Scanner(System.in);
                 prods = prod.nextInt();
-                if (prods >= 21 && prods <= 30)
+                if (prods >= 21 && prods <= 30) {
                     discount.add(prods);
-                products.add(prods);
+                    productIDs.add(prods);
+                    products.add(prods);
+                }
             } while (prods != 999);
             //order.insertOrders(getId(), products.size()-1);
             insertOrders(getId(), discount.size(), getIntTime());
@@ -165,11 +174,15 @@ public class Controller {
             System.out.println("Your order has been created\n" +
                     "Your order will be delivered at " + getDelTime() + "\n" +
                     "Your order id is: " + Print.printTableSize());
+
             System.out.println("You ordered: ");
             for (int i = 0; i < products.size() - 1; i++) {
                 orderedProd(products.get(i));
             }
             checkDiscounts(getId());
+
+            System.out.println();
+            Controller.statement.executeUpdate("Insert into orderitems (id, "+Print.printItemsInOrder(productIDs)+  ") values ("+Print.printTableSize()+", "+Print.orderItems(productIDs)+  ")");
 
         } else if (name.equals("cancel")) {
             System.out.println("enter your order id to cancel your order");
@@ -177,6 +190,20 @@ public class Controller {
             int cancelId = cancel.nextInt();
             deleteOrders(cancelId);
             //System.out.println("Your order has been cancelled succesfully");
+
+        }
+        else if (name.equals("info")) {
+            System.out.println("enter the id of the pizza to check the info");
+            Scanner scan = new Scanner(System.in);
+            int pizzaId = scan.nextInt();
+            Print.printPizza(pizzaId);
+        }
+        else{
+            System.out.println("enter your order id");
+            Scanner scan = new Scanner(System.in);
+            int id = scan.nextInt();
+            Print.printStatus(id);
+
         }
     }
 

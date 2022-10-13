@@ -3,10 +3,16 @@ SELECT * FROM Ingredients;
 SELECT * FROM Desserts; 
 SELECT * FROM Drinks; 
 SELECT *FROM Menu;
+SELECT * FROM orderItems;
 SELECT * FROM Staff;
 SELECT * FROM Customer;
-SELECT * FROM Customer WHERE  id = 2;
 SELECT * FROM PizzaIngredients;
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'PizzaIngredients';
+
 SELECT * FROM Orders;
 SELECT * FROM OrdersCust;
-DELETE FROM Orders;
+
