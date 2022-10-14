@@ -5,13 +5,12 @@ import Java.Controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static Java.Controller.con;
+import static Java.Controller.*;
 
 public class Print {
     public static void printPizzas() throws SQLException {
@@ -119,7 +118,7 @@ public class Print {
         a.add(3);
         a.add(3);
         a.add(4);
-        System.out.println(Print.printItemsInOrder((a)));
+        System.out.println(Print.orderItems((a)));
     }
 
 
@@ -144,21 +143,51 @@ public class Print {
         ResultSet resultSet = Controller.statement.executeQuery("SELECT COLUMN_NAME\n" +
                 "FROM INFORMATION_SCHEMA.COLUMNS\n" +
                 "WHERE TABLE_NAME = 'orderitems';");
-        while(resultSet.next()){
+        while (resultSet.next()) {
             items.add(resultSet.getString("COLUMN_NAME"));
         }
         System.out.println("You ordered: ");
-        ResultSet resultSet2 = Controller.statement.executeQuery("SELECT * FROM orderitems where id = "+id+";");
-        while(resultSet2.next()){
-            for(String item : items){
-                if(resultSet2.getInt(item) >= 1 && !item.equals("id")){
+        ResultSet resultSet2 = Controller.statement.executeQuery("SELECT * FROM orderitems where id = " + id + ";");
+        String date = null;
+        while (resultSet2.next()) {
+            for (String item : items) {
+                if (!item.equals("date") && resultSet2.getInt(item) >= 1 && !item.equals("id")) {
                     Statement statement = con.createStatement();
-                    ResultSet rs = statement.executeQuery("SELECT name FROM menu where id ="+ item+";");
-                    while (rs.next()){
-                        System.out.println(+resultSet2.getInt(item) +" "+ rs.getString("name"));
+                    ResultSet rs = statement.executeQuery("SELECT name FROM menu where id =" + item + ";");
+                    while (rs.next()) {
+                        System.out.println(+resultSet2.getInt(item) + " " + rs.getString("name"));
                     }
+                }
+                if (item.equals("date")) {
+                    date = resultSet2.getString("date");
                 }
             }
         }
+        resultSet = statement.executeQuery("select * from orders where id ="+id+";");
+        long currDate = getIntTime();
+        long orderDate = 0;
+        while (resultSet.next()){
+            orderDate = resultSet.getLong("date");
+        }
+        if(currDate < orderDate+GdelTime) {
+            System.out.println("Your order will be delivered at: " + date);
+        }else{
+            System.out.println("Your order was delivered at: "+ date);
+        }
     }
+    public static long getIntTime(){
+
+        Date date = new Date();
+        return date.getTime();
+
+    }
+    public static String getDelTime(){
+        String deliveryTime;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MILLISECOND,GdelTime);
+        deliveryTime = dateFormat.format(cal.getTime());
+        return deliveryTime;
+    }
+
 }

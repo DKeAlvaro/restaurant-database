@@ -10,6 +10,9 @@ import java.util.*;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static Java.Helper.Print.getDelTime;
+import static Java.Helper.Print.getIntTime;
+
 public class Controller {
     static int Id;
     public static Connection con;
@@ -17,12 +20,13 @@ public class Controller {
     public static ArrayList<Integer> discount = new ArrayList<Integer>();
     static boolean test = false;
     static boolean fullDel = true;
+    public static int GdelTime = 60000;
 
     public static ArrayList <Integer>products = new ArrayList<Integer>();
 
     static {
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pizzaapi", "root", "Cooper03");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pizzaapi", "root", "Otramas2022");
             statement = con.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,20 +110,24 @@ public class Controller {
 //            return;
         }
     }
-    public static boolean availability(int id) throws SQLException {
-        for(int i = 1; i<=2; i++) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Staff WHERE id= " + i);
-            while (resultSet.next()) {
-                if (resultSet.getInt("orde") != 0) {
-                    fullDel = false;
-                    //return fullDel;
-                } else {
-                    fullDel = true;
-                    //return fullDel;
+    public static boolean availability(int i) throws SQLException {
+
+        long currDate = getIntTime();
+        long deliveryTime = GdelTime; //time to deliver an order
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Staff WHERE id= " + i);
+        while (resultSet.next()) {
+            if (resultSet.getInt("orde") == 0) {
+                return true;
+            } else {
+                if(currDate - resultSet.getLong("date") > deliveryTime){
+                    PreparedStatement st = con.prepareStatement("UPDATE stafF set orde = 0 where id = " + i+";");
+                    st.execute();
+                    return true;
                 }
             }
         }
-        return fullDel;
+
+        return false;
     }
 
     public static void controller() throws SQLException {
@@ -190,8 +198,7 @@ public class Controller {
                     assignOrders(i, Print.printTableSize(), getIntTime());
                     if (test)
                         break;
-                }
-                else {
+                } else if(i == 5) {
                     System.out.println("All of our deliverers are occupied\n" +
                             "Wait a little longer");
                     return;
@@ -208,7 +215,7 @@ public class Controller {
             checkDiscounts(getId());
 
             System.out.println();
-            Controller.statement.executeUpdate("Insert into orderitems (id, "+Print.printItemsInOrder(productIDs)+  ") values ("+Print.printTableSize()+", "+Print.orderItems(productIDs)+  ")");
+            Controller.statement.executeUpdate("Insert into orderitems (id, date, "+Print.printItemsInOrder(productIDs)+  ") values ("+Print.printTableSize()+","+"'"+ getDelTime()+"'"+ ", "+Print.orderItems(productIDs)+");");
 
         } else if (name.equals("cancel")) {
             System.out.println("enter your order id to cancel your order");
@@ -236,18 +243,5 @@ public class Controller {
     public static int getId(){
         return Id;
     }
-    public static String getDelTime(){
-        String deliveryTime;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE,30);
-        deliveryTime = dateFormat.format(cal.getTime());
-        return deliveryTime;
-    }
-    public static long getIntTime(){
 
-        Date date = new Date();
-        return date.getTime();
-
-    }
 }

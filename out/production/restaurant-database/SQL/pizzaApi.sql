@@ -20,7 +20,29 @@ CREATE TABLE PizzaIngredients(id INTEGER, pepperoni bit, ham bit, tomato bit, he
 salami bit, pienapple bit, olives bit,barbequesauce bit, price double, PRIMARY KEY (id));
 
 CREATE TABLE Orders(id INTEGER,delivery varchar(45), status varchar(45), custid integer, pizzas INTEGER, date bigint, PRIMARY KEY (id));
-create table
+
+create table OrderItems(id Integer, `15` integer,
+`16` integer,
+`17` integer,
+`18` integer,
+`19` integer,
+`10` integer,
+`21` integer,
+`22` integer,
+`23` integer,
+`24` integer,
+`25` integer,
+`26` integer,
+`27` integer,
+`28` integer,
+`29` integer,
+`20` integer, primary key (id));
+
+alter table orderItems
+rename column `10` to `20`;
+
+
+
 
 
 CREATE TABLE OrdersCust(id INTEGER,name VARCHAR(30), phone INTEGER, adress VARCHAR(45));
