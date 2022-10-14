@@ -19,14 +19,14 @@ public class Controller {
     public static Statement statement;
     public static ArrayList<Integer> discount = new ArrayList<Integer>();
     static boolean test = false;
-    static boolean fullDel = true;
-    public static int GdelTime = 60000;
+    //static boolean fullDel = true;
+    public static int GdelTime = 1800000;
 
     public static ArrayList <Integer>products = new ArrayList<Integer>();
 
     static {
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pizzaapi", "root", "Otramas2022");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pizzaapi", "root", "Cooper03");
             statement = con.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class Controller {
         statement.execute("insert into orders values("+sizes+","+"'" + getDelTime() + "'"+" ,'in progress',"+"'"+id+"'"+","+taman+", "+ date+")");
     }
 
-    public static void insertCustOrder(int id) throws SQLException {
+    public static void insertCustOrder(int orderid, int id) throws SQLException {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Customer WHERE  id = "+id);
         String name = null;
         int phone = 0;
@@ -56,7 +56,7 @@ public class Controller {
             adress = resultSet.getString("adress");
 
         }
-        statement.execute("INSERT INTO OrdersCust VALUES ("+id+","+"'"+ name+"'"+","+phone+","+"'"+adress+"'"+")");
+        statement.execute("INSERT INTO OrdersCust VALUES ("+orderid+","+id+","+"'"+ name+"'"+","+phone+","+"'"+adress+"'"+")");
 
     }
     public static void deleteOrders(int id) throws SQLException {
@@ -67,6 +67,13 @@ public class Controller {
             if (resultSet.getLong("date") + 300000 >= getIntTime()) {
                 PreparedStatement statement1 = con.prepareStatement("DELETE FROM Orders WHERE id = " + id);
                 statement1.executeUpdate();
+                PreparedStatement statement2 = con.prepareStatement("DELETE FROM OrdersCust WHERE orderid = " + id);
+                statement2.executeUpdate();
+                PreparedStatement statement3 = con.prepareStatement("DELETE FROM OrderItems WHERE id = " + id);
+                statement3.executeUpdate();
+                PreparedStatement statement4 = con.prepareStatement("UPDATE Staff set orde="+0+", date = "+0+" WHERE orde = "+id+";");
+                statement4.execute();
+                System.out.println("Your order has been cancelled");
             }
             else{
                 System.out.println("\nYour order cannot be cancelled because more than five minutes have elapsed");
@@ -89,7 +96,7 @@ public class Controller {
         while (resultSet.next()){
             count += resultSet.getInt("pizzas");
         }
-        if (count>=10){
+        if (count % 10==0){
             System.out.println("You have a 10% discount code");
             System.out.println("Your code is : Givemea10");
         }
@@ -99,7 +106,7 @@ public class Controller {
         while(resultSet.next()){
             if (resultSet.getInt("orde")==0){
                 //statement.execute("INSERT INTO Staff (orde, date) VALUES ("+order+","+date+")");
-                PreparedStatement statement1 = con.prepareStatement("UPDATE Staff set orde = "+order+", date = "+date+" WHERE id = "+id+"");
+                PreparedStatement statement1 = con.prepareStatement("UPDATE Staff set orde = "+order+", date = "+date+" WHERE id = "+id+";");
                 statement1.execute();
                 test = true;
                 break;
@@ -192,13 +199,13 @@ public class Controller {
             } while (prods != 999);
             //order.insertOrders(getId(), products.size()-1);
             insertOrders(getId(), discount.size(), getIntTime());
-            insertCustOrder(getId());
-            for (int i = 1; i <= 5; i++) {
+            insertCustOrder(Print.printTableSize(),getId());
+            for (int i = 1; i <= 3; i++) {
                 if(availability(i)) {
                     assignOrders(i, Print.printTableSize(), getIntTime());
                     if (test)
                         break;
-                } else if(i == 5) {
+                } else if(i == 3) {
                     System.out.println("All of our deliverers are occupied\n" +
                             "Wait a little longer");
                     return;
