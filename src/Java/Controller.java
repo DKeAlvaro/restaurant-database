@@ -16,6 +16,7 @@ public class Controller {
     public static Statement statement;
     public static ArrayList<Integer> discount = new ArrayList<Integer>();
     static boolean test = false;
+    static boolean fullDel = true;
 
     public static ArrayList <Integer>products = new ArrayList<Integer>();
 
@@ -63,7 +64,7 @@ public class Controller {
                 PreparedStatement statement1 = con.prepareStatement("DELETE FROM Orders WHERE id = " + id);
                 statement1.executeUpdate();
             }
-             else{
+            else{
                 System.out.println("\nYour order cannot be cancelled because more than five minutes have elapsed");
             }
 
@@ -79,7 +80,7 @@ public class Controller {
         }
     }
     public static void checkDiscounts(int id ) throws SQLException {
-       ResultSet resultSet = statement.executeQuery("SELECT * FROM Orders WHERE custid = "+id);
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Orders WHERE custid = "+id);
         int count = 0;
         while (resultSet.next()){
             count += resultSet.getInt("pizzas");
@@ -96,16 +97,29 @@ public class Controller {
                 //statement.execute("INSERT INTO Staff (orde, date) VALUES ("+order+","+date+")");
                 PreparedStatement statement1 = con.prepareStatement("UPDATE Staff set orde = "+order+", date = "+date+" WHERE id = "+id+"");
                 statement1.execute();
-                //test = true;
-                break;
-            }
-            else if (id ==3) {
-                System.out.println("All of our deliverers are occupied\n" +
-                        "Wait a little more to place an order");
                 test = true;
                 break;
             }
+//            else
+//                System.out.println("All of our deliverers are occupied\n" +
+//                        "Wait a little more to place an order");
+//            return;
         }
+    }
+    public static boolean availability(int id) throws SQLException {
+        for(int i = 1; i<=2; i++) {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Staff WHERE id= " + i);
+            while (resultSet.next()) {
+                if (resultSet.getInt("orde") != 0) {
+                    fullDel = false;
+                    //return fullDel;
+                } else {
+                    fullDel = true;
+                    //return fullDel;
+                }
+            }
+        }
+        return fullDel;
     }
 
     public static void controller() throws SQLException {
@@ -161,17 +175,27 @@ public class Controller {
                 prods = prod.nextInt();
                 if (prods >= 21 && prods <= 30) {
                     discount.add(prods);
+                }
+                if(14<prods && prods< 31){
                     productIDs.add(prods);
                     products.add(prods);
+
                 }
             } while (prods != 999);
             //order.insertOrders(getId(), products.size()-1);
             insertOrders(getId(), discount.size(), getIntTime());
             insertCustOrder(getId());
             for (int i = 1; i <= 5; i++) {
-                assignOrders(i, Print.printTableSize(), getIntTime());
-                if (test)
+                if(availability(i)) {
+                    assignOrders(i, Print.printTableSize(), getIntTime());
+                    if (test)
+                        break;
+                }
+                else {
+                    System.out.println("All of our deliverers are occupied\n" +
+                            "Wait a little longer");
                     return;
+                }
             }
             System.out.println("Your order has been created\n" +
                     "Your order will be delivered at " + getDelTime() + "\n" +
@@ -210,7 +234,7 @@ public class Controller {
     }
 
     public static int getId(){
-       return Id;
+        return Id;
     }
     public static String getDelTime(){
         String deliveryTime;
