@@ -21,7 +21,7 @@ public class Controller {
 
     static {
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pizzaapi", "root", "Otramas2022");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pizzaapi", "root", "Cooper03");
             statement = con.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,13 +96,15 @@ public class Controller {
                 //statement.execute("INSERT INTO Staff (orde, date) VALUES ("+order+","+date+")");
                 PreparedStatement statement1 = con.prepareStatement("UPDATE Staff set orde = "+order+", date = "+date+" WHERE id = "+id+"");
                 statement1.execute();
+                //test = true;
+                break;
+            }
+            else if (id ==3) {
+                System.out.println("All of our deliverers are occupied\n" +
+                        "Wait a little more to place an order");
                 test = true;
                 break;
             }
-            else
-                System.out.println("All of our deliverers are occupied\n" +
-                        "Wait a little more to place an order");
-            break;
         }
     }
 
@@ -169,14 +171,14 @@ public class Controller {
             for (int i = 1; i <= 5; i++) {
                 assignOrders(i, Print.printTableSize(), getIntTime());
                 if (test)
-                    break;
+                    return;
             }
             System.out.println("Your order has been created\n" +
                     "Your order will be delivered at " + getDelTime() + "\n" +
                     "Your order id is: " + Print.printTableSize());
 
             System.out.println("You ordered: ");
-            for (int i = 0; i < products.size() - 1; i++) {
+            for (int i = 0; i < products.size() ; i++) {
                 orderedProd(products.get(i));
             }
             checkDiscounts(getId());
