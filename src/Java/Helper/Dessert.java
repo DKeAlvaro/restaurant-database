@@ -25,6 +25,6 @@ public class Dessert {
     }
     @Override
     public String toString(){
-        return "id:"+getId()  + " "+getName()+ " price:"+ getPrice();
+        return "id: "+getId()  + " "+getName()+ " price: "+ getPrice();
     }
 }

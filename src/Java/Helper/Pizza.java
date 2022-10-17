@@ -34,6 +34,6 @@ public class Pizza {
     }
     @Override
     public String toString(){
-        return "id:"+ getId()  + " "+getName()+ " price:"+ getPrice() + " vegan:"+ getVegan() ;
+        return "id: "+ getId()  + " "+getName()+ " price: "+ getPrice() + " vegan: "+ getVegan() ;
     }
 }

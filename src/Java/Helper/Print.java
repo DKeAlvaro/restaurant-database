@@ -46,6 +46,16 @@ public class Print {
         }
 
     }
+    public static void printOptions(){
+        System.out.println(
+                "If you want to order type 'order'\n "
+        );
+        System.out.println("If you want to exit type 'get me out'\n");
+        System.out.println("if you want to cancel an order please type 'cancel'\n");
+        System.out.println("If you want to get the info of a pizza type 'info'\n");
+        System.out.println("If you want to see the status of your order type 'status'\n");
+
+    }
     public static int printTableSize() throws SQLException {
         ResultSet resultSet = Controller.statement.executeQuery("select count(*) from orders");
         resultSet.next();
@@ -54,29 +64,31 @@ public class Print {
     }
 
     public static void printPizza(int id) throws  SQLException{
-        ArrayList<String> ingredients = new ArrayList<>();
-        ResultSet resultSet = Controller.statement.executeQuery("SELECT COLUMN_NAME\n" +
-                "FROM INFORMATION_SCHEMA.COLUMNS\n" +
-                "WHERE TABLE_NAME = 'PizzaIngredients';");
-        while(resultSet.next()){
-            ingredients.add(resultSet.getString("COLUMN_NAME"));
-        }
         ResultSet resultSet3 = Controller.statement.executeQuery("SELECT * from pizzas where id = "+id);
         while (resultSet3.next()) {
             System.out.println("Pizza name: "+resultSet3.getString(2));
         }
         System.out.println("Ingredients: ");
-
-
+        int price = 0;
+        List<Integer> ingredientsID = new ArrayList<>();
 
                 ResultSet resultSet2 = Controller.statement.executeQuery("SELECT * FROM PizzaIngredients where id = "+id+";");
         while(resultSet2.next()){
-            for(String ingredient : ingredients){
-                if(resultSet2.getInt(ingredient) == 1){
-                    System.out.println(ingredient);
+            for(int i = 1; i < 15; i++){
+                if(resultSet2.getInt("" + i+ "") == 1){
+                    ingredientsID.add(i);
                 }
             }
+            price = resultSet2.getInt("price");
         }
+        for(int i : ingredientsID){
+            ResultSet resultSet = Controller.statement.executeQuery("SELECT * FROM Ingredients where id = "+i+";");
+            while (resultSet.next()){
+                System.out.println(resultSet.getString("name"));
+            }
+        }
+        System.out.println("Price: "+price);
+        System.out.println();
     }
 
     /**
@@ -138,42 +150,55 @@ public class Print {
         return sb.toString();
     }
 
-    public static void printStatus(int id) throws SQLException {
-        ArrayList<String> items = new ArrayList<>();
-        ResultSet resultSet = Controller.statement.executeQuery("SELECT COLUMN_NAME\n" +
-                "FROM INFORMATION_SCHEMA.COLUMNS\n" +
-                "WHERE TABLE_NAME = 'orderitems';");
-        while (resultSet.next()) {
-            items.add(resultSet.getString("COLUMN_NAME"));
-        }
-        System.out.println("You ordered: ");
-        ResultSet resultSet2 = Controller.statement.executeQuery("SELECT * FROM orderitems where id = " + id + ";");
-        String date = null;
-        while (resultSet2.next()) {
-            for (String item : items) {
-                if (!item.equals("date") && resultSet2.getInt(item) >= 1 && !item.equals("id")) {
-                    Statement statement = con.createStatement();
-                    ResultSet rs = statement.executeQuery("SELECT name FROM menu where id =" + item + ";");
-                    while (rs.next()) {
-                        System.out.println(+resultSet2.getInt(item) + " " + rs.getString("name"));
-                    }
-                }
-                if (item.equals("date")) {
-                    date = resultSet2.getString("date");
-                }
+    public static void printStatus(int id, int custId) throws SQLException {
+        boolean matchingIds = false;
+        ResultSet rs2 = statement.executeQuery("select custid from orders where id = "+id);
+        while (rs2.next()){
+            if(rs2.getInt("custid") == custId){
+                matchingIds = true;
             }
         }
-        resultSet = statement.executeQuery("select * from orders where id ="+id+";");
-        long currDate = getIntTime();
-        long orderDate = 0;
-        while (resultSet.next()){
-            orderDate = resultSet.getLong("date");
-        }
-        if(currDate < orderDate+GdelTime) {
-            System.out.println("Your order will be delivered at: " + date);
+        if (matchingIds) {
+            ArrayList<String> items = new ArrayList<>();
+            ResultSet resultSet = Controller.statement.executeQuery("SELECT COLUMN_NAME\n" +
+                    "FROM INFORMATION_SCHEMA.COLUMNS\n" +
+                    "WHERE TABLE_NAME = 'orderitems';");
+            while (resultSet.next()) {
+                items.add(resultSet.getString("COLUMN_NAME"));
+            }
+            System.out.println("You ordered: ");
+            ResultSet resultSet2 = Controller.statement.executeQuery("SELECT * FROM orderitems where id = " + id + ";");
+            String date = null;
+            while (resultSet2.next()) {
+                for (String item : items) {
+                    if (!item.equals("date") && resultSet2.getInt(item) >= 1 && !item.equals("id")) {
+                        Statement statement = con.createStatement();
+                        ResultSet rs = statement.executeQuery("SELECT name FROM menu where id =" + item + ";");
+                        while (rs.next()) {
+                            System.out.println(+resultSet2.getInt(item) + " " + rs.getString("name"));
+                        }
+                    }
+                    if (item.equals("date")) {
+                        date = resultSet2.getString("date");
+                    }
+                }
+            }
+            resultSet = statement.executeQuery("select * from orders where id ="+id+";");
+            long currDate = getIntTime();
+            long orderDate = 0;
+            while (resultSet.next()){
+                orderDate = resultSet.getLong("date");
+            }
+            if(currDate < orderDate+GdelTime) {
+                System.out.println("Your order will be delivered at: " + date);
+            }else{
+                System.out.println("Your order was delivered at: "+ date);
+            }
         }else{
-            System.out.println("Your order was delivered at: "+ date);
+            System.out.println("Sorry, you didn't make that order");
         }
+
+
     }
     public static long getIntTime(){
 
