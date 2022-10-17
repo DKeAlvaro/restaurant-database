@@ -20,7 +20,7 @@ public class Controller {
     public static ArrayList<Integer> discount = new ArrayList<Integer>();
     static boolean test = false;
     //static boolean fullDel = true;
-    public static int GdelTime = 1800000;
+    public static int GdelTime = 180;
 
     public static ArrayList <Integer>products = new ArrayList<Integer>();
 
@@ -95,8 +95,9 @@ public class Controller {
         int count = 0;
         while (resultSet.next()){
             count += resultSet.getInt("pizzas");
+           // System.out.println(count);
         }
-        if (count % 10==0){
+        if (count >= 10){
             System.out.println("You have a 10% discount code");
             System.out.println("Your code is : Givemea10");
         }
